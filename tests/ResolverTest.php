@@ -152,6 +152,72 @@ final class ResolverTest extends TestCase
                 CPA::S,
                 Carbon::create(2023, Carbon::SEPTEMBER),
             ],
+            'Combined classification' => [
+                VATRate::COMBINED,
+                'CZE',
+                // @phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                new class implements ProductTaxonomy {
+                    public function getCode(): string
+                    {
+                        return VATRate::COMBINED->name;
+                    }
+
+                    public function is(string|ProductTaxonomy $code): bool
+                    {
+                        return false;
+                    }
+
+                    public function belongsTo(string|ProductTaxonomy $code): bool
+                    {
+                        return false;
+                    }
+
+                    public function wraps(string|ProductTaxonomy $code): bool
+                    {
+                        return false;
+                    }
+
+                    public static function isValid(string $code): bool
+                    {
+                        return false;
+                    }
+                },
+                // @phpcs:enable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                Carbon::now(),
+            ],
+            'Any classification' => [
+                VATRate::ANY,
+                'CZE',
+                // @phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                new class implements ProductTaxonomy {
+                    public function getCode(): string
+                    {
+                        return VATRate::ANY->name;
+                    }
+
+                    public function is(string|ProductTaxonomy $code): bool
+                    {
+                        return false;
+                    }
+
+                    public function belongsTo(string|ProductTaxonomy $code): bool
+                    {
+                        return false;
+                    }
+
+                    public function wraps(string|ProductTaxonomy $code): bool
+                    {
+                        return false;
+                    }
+
+                    public static function isValid(string $code): bool
+                    {
+                        return false;
+                    }
+                },
+                // @phpcs:enable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                Carbon::now(),
+            ],
         ];
     }
 

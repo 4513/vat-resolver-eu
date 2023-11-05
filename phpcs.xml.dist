@@ -76,4 +76,7 @@
             <property name="orderAlphabetically" value="true" type="bool" />
         </properties>
     </rule>
+    <rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
+        <exclude-pattern>./src/EUResolver.php</exclude-pattern>
+    </rule>
 </ruleset>

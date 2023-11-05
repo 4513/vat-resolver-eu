@@ -46,11 +46,21 @@ final class EUResolver implements VATResolver
         ?DateTimeInterface $date
     ): VAT
     {
+        $date ??= Carbon::now();
+
+        if ($classification->getCode() === VATRate::ANY->name) {
+            return VAT::get($countryCode, VATRate::ANY, $classification, $date);
+        }
+
+        if ($classification->getCode() === VATRate::COMBINED->name) {
+            return VAT::get($countryCode, VATRate::COMBINED, $classification, $date);
+        }
+
         // Unsupported classification.
         if (!$classification instanceof ClassificationOfProductsByActivity) {
             throw new CouldNotRetrieveVATInformationException(
                 (string) $countryCode,
-                $date ?? Carbon::now(),
+                $date,
                 new DomainException('Classification must be of type CPA.')
             );
         }
@@ -58,13 +68,12 @@ final class EUResolver implements VATResolver
         if (!key_exists((string) $countryCode, $this->resources)) {
             throw new CouldNotRetrieveVATInformationException(
                 (string) $countryCode,
-                $date ?? Carbon::now(),
+                $date,
                 new DomainException('Country code is not supported.')
             );
         }
 
         $resource  = $this->resources[(string) $countryCode];
-        $date    ??= Carbon::now();
         $timestamp = $date->getTimestamp();
 
         foreach ($resource as $validSince => $classificationData) {
